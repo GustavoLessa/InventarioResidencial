@@ -1,12 +1,14 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+namespace Inventario.Domain.Entities;
 
-namespace Inventario.Domain.Entities
+public class Local : BaseEntity
 {
-    public class Local
+    public string Nome { get; set; } = string.Empty;
+    public string? Descricao { get; set; }
+
+    public Local() { }
+
+    public Local(string nome)
     {
-        
+        Nome = nome;
     }
 }
