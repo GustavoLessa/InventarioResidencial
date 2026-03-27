@@ -40,9 +40,8 @@ private readonly IValidator<CreateItemInventarioDTO> _validator;
         
         if (!validationResult.IsValid)
         {
-            // Aqui poderíamos lançar uma exceção customizada ou tratar os erros
-            var erros = string.Join(", ", validationResult.Errors.Select(e => e.ErrorMessage));
-            throw new Exception($"Dados inválidos: {erros}");
+            // Agora lançamos a ValidationException do FluentValidation
+            throw new ValidationException(validationResult.Errors);
         }
 
         var item = new ItemInventario(dto.Nome, dto.ValorCompra, dto.CategoriaId, dto.LocalId)
