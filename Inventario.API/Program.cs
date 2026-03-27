@@ -6,6 +6,7 @@ using Inventario.Application.Interfaces;
 using Inventario.Application.Services;
 using FluentValidation;
 using Inventario.Application.Validations;
+using Inventario.API.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,6 +37,8 @@ builder.Services.AddValidatorsFromAssemblyContaining<CreateItemInventarioValidat
 
 var app = builder.Build();
 
+// ATENÇÃO: O middleware de exceção deve ser um dos primeiros!
+app.UseMiddleware<ExceptionMiddleware>();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
