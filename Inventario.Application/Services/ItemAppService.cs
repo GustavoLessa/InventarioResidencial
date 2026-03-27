@@ -49,7 +49,7 @@ private readonly IValidator<CreateItemInventarioDTO> _validator;
             Descricao = dto.Descricao,
             Marca = dto.Marca,
             Modelo = dto.Modelo,
-            DataAquisicao = dto.DataAquisicao
+            DataAquisicao = dto.DataAquisicao?.ToUniversalTime() // Garantindo que a data seja armazenada em UTC
         };
 
         await _uow.Itens.AddAsync(item);

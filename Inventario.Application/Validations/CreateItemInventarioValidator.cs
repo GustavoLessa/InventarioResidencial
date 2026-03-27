@@ -22,6 +22,6 @@ public class CreateItemInventarioValidator : AbstractValidator<CreateItemInventa
             .NotEmpty().WithMessage("O local de armazenamento é obrigatório.");
 
         RuleFor(x => x.DataAquisicao)
-            .LessThanOrEqualTo(DateTime.Now).WithMessage("A data de aquisição não pode ser no futuro.");
+            .LessThanOrEqualTo(DateTime.UtcNow).WithMessage("A data de aquisição não pode ser no futuro.");
     }
 }
