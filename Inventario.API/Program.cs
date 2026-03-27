@@ -2,6 +2,8 @@ using Inventario.Infrastructure.Context;
 using Inventario.Domain.Interfaces;
 using Inventario.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Inventario.Application.Interfaces;
+using Inventario.Application.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +19,7 @@ builder.Services.AddScoped<IItemInventarioRepository, ItemInventarioRepository>(
 builder.Services.AddScoped<ILocalRepository, LocalRepository>();
 builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IItemAppService, ItemAppService>();
 
 builder.Services.AddControllers();
 // ... resto do código (Swagger, etc)
