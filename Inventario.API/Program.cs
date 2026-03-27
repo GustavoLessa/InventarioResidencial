@@ -7,6 +7,7 @@ using Inventario.Application.Services;
 using FluentValidation;
 using Inventario.Application.Validations;
 using Inventario.API.Middleware;
+using Inventario.Application.Mappings;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,6 +35,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddValidatorsFromAssemblyContaining<CreateItemInventarioValidator>();
+builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 var app = builder.Build();
 

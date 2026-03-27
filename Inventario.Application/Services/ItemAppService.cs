@@ -1,3 +1,4 @@
+using AutoMapper;
 using FluentValidation;
 using Inventario.Application.DTOs;
 using Inventario.Application.Interfaces;
@@ -12,25 +13,20 @@ public class ItemAppService : IItemAppService
     // Adicione a injeção do IValidator no construtor
 private readonly IValidator<CreateItemInventarioDTO> _validator;
     private readonly IUnitOfWork _uow;
+    private readonly IMapper _mapper; // Injetamos o Mapper
 
-    public ItemAppService(IUnitOfWork uow, IValidator<CreateItemInventarioDTO> validator)
+    public ItemAppService(IUnitOfWork uow, IValidator<CreateItemInventarioDTO> validator, IMapper mapper)
     {
         _uow = uow;
         _validator = validator;
+        _mapper = mapper;
     }
 
     public async Task<IEnumerable<ItemInventarioDTO>> GetAllAsync()
     {
         var itens = await _uow.Itens.GetAllAsync();
         
-        // Mapeamento manual (depois podemos usar AutoMapper para simplificar)
-        return itens.Select(i => new ItemInventarioDTO(
-            i.Id, i.Nome, i.Descricao, i.Marca, i.Modelo, 
-            i.ValorCompra, i.ValorAtual, i.DataAquisicao,
-            i.Categoria?.Nome ?? "Sem Categoria",
-            i.Local?.Nome ?? "Sem Local",
-            i.ImagemUrl, i.NotaFiscalUrl
-        ));
+        return _mapper.Map<IEnumerable<ItemInventarioDTO>>(itens);
     }
 
     public async Task<bool> AddAsync(CreateItemInventarioDTO dto)
@@ -44,13 +40,8 @@ private readonly IValidator<CreateItemInventarioDTO> _validator;
             throw new ValidationException(validationResult.Errors);
         }
 
-        var item = new ItemInventario(dto.Nome, dto.ValorCompra, dto.CategoriaId, dto.LocalId)
-        {
-            Descricao = dto.Descricao,
-            Marca = dto.Marca,
-            Modelo = dto.Modelo,
-            DataAquisicao = dto.DataAquisicao?.ToUniversalTime() // Garantindo que a data seja armazenada em UTC
-        };
+        // Converte DTO para Entidade automaticamente
+        var item = _mapper.Map<ItemInventario>(dto);
 
         await _uow.Itens.AddAsync(item);
         return await _uow.CommitAsync() > 0;
