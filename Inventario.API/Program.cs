@@ -10,7 +10,8 @@ var builder = WebApplication.CreateBuilder(args);
 // 1. Configurar a String de Conexão do Supabase (PostgreSQL)
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(connectionString, 
+    options.UseLazyLoadingProxies() // Adicione esta linha!
+    .UseNpgsql(connectionString, 
         b => b.MigrationsAssembly("Inventario.Infrastructure"))); // Define onde as migrations serão salvas
 
 // 2. Registrar os Repositórios e o Unit of Work

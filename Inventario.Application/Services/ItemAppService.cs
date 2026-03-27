@@ -54,4 +54,33 @@ public class ItemAppService : IItemAppService
             i.ImagemUrl, i.NotaFiscalUrl
         );
     }
+
+    public async Task<bool> UpdateAsync(Guid id, CreateItemInventarioDTO dto)
+    {
+        var itemExistente = await _uow.Itens.GetByIdAsync(id);
+        if (itemExistente == null) return false;
+
+        // Atualizando as propriedades (Clean Code: mapeamento manual)
+        itemExistente.Nome = dto.Nome;
+        itemExistente.Descricao = dto.Descricao;
+        itemExistente.Marca = dto.Marca;
+        itemExistente.Modelo = dto.Modelo;
+        itemExistente.ValorCompra = dto.ValorCompra;
+        itemExistente.CategoriaId = dto.CategoriaId;
+        itemExistente.LocalId = dto.LocalId;
+        itemExistente.DataAquisicao = dto.DataAquisicao;
+        itemExistente.DataAtualizacao = DateTime.UtcNow;
+
+        _uow.Itens.Update(itemExistente);
+        return await _uow.CommitAsync() > 0;
+    }
+
+    public async Task<bool> DeleteAsync(Guid id)
+    {
+        var item = await _uow.Itens.GetByIdAsync(id);
+        if (item == null) return false;
+
+        _uow.Itens.Delete(item);
+        return await _uow.CommitAsync() > 0;
+    }
 }
