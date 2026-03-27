@@ -4,6 +4,8 @@ using Inventario.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Inventario.Application.Interfaces;
 using Inventario.Application.Services;
+using FluentValidation;
+using Inventario.Application.Validations;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,6 +32,7 @@ builder.Services.AddControllers();
 // // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddValidatorsFromAssemblyContaining<CreateItemInventarioValidator>();
 
 var app = builder.Build();
 

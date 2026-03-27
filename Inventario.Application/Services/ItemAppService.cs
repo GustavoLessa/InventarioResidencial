@@ -1,3 +1,4 @@
+using FluentValidation;
 using Inventario.Application.DTOs;
 using Inventario.Application.Interfaces;
 using Inventario.Domain.Entities;
@@ -5,13 +6,17 @@ using Inventario.Domain.Interfaces;
 
 namespace Inventario.Application.Services;
 
+
 public class ItemAppService : IItemAppService
 {
+    // Adicione a injeção do IValidator no construtor
+private readonly IValidator<CreateItemInventarioDTO> _validator;
     private readonly IUnitOfWork _uow;
 
-    public ItemAppService(IUnitOfWork uow)
+    public ItemAppService(IUnitOfWork uow, IValidator<CreateItemInventarioDTO> validator)
     {
         _uow = uow;
+        _validator = validator;
     }
 
     public async Task<IEnumerable<ItemInventarioDTO>> GetAllAsync()
@@ -30,6 +35,16 @@ public class ItemAppService : IItemAppService
 
     public async Task<bool> AddAsync(CreateItemInventarioDTO dto)
     {
+        // Executa a validação
+        var validationResult = await _validator.ValidateAsync(dto);
+        
+        if (!validationResult.IsValid)
+        {
+            // Aqui poderíamos lançar uma exceção customizada ou tratar os erros
+            var erros = string.Join(", ", validationResult.Errors.Select(e => e.ErrorMessage));
+            throw new Exception($"Dados inválidos: {erros}");
+        }
+
         var item = new ItemInventario(dto.Nome, dto.ValorCompra, dto.CategoriaId, dto.LocalId)
         {
             Descricao = dto.Descricao,
