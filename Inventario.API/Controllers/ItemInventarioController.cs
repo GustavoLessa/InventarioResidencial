@@ -1,15 +1,17 @@
 using Microsoft.AspNetCore.Mvc;
 using Inventario.Application.Interfaces; // Namespace da tua camada de Application
 using Inventario.Domain.Entities;
-using Inventario.Application.DTOs;      // Namespace da tua camada de Domain
+using Inventario.Application.DTOs;
+using Microsoft.AspNetCore.Authorization;      // Namespace da tua camada de Domain
 
 namespace Inventario.API.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class ItemInventarioController : ControllerBase
     {
-        private readonly IItemAppService _itemService;
+        private readonly IItemAppService _itemService;        
 
         // Injeção de Dependência da Interface de Aplicação
         public ItemInventarioController(IItemAppService itemService)
