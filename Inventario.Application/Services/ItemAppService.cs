@@ -23,13 +23,13 @@ public class ItemAppService : IItemAppService
         _mapper = mapper;
     }
 
-    public async Task<IEnumerable<ItemInventarioDTO>> GetAllAsync()
+    public async Task<IEnumerable<ItemInventarioDTO>> GetAllAsync(string userId)
     {
-        var itens = await _uow.Itens.GetAllAsync();
+        var itens = await _uow.Itens.GetByUserIdAsync(userId);
         return _mapper.Map<IEnumerable<ItemInventarioDTO>>(itens);
     }
 
-    public async Task<Guid?> AddAsync(CreateItemInventarioDTO dto)
+    public async Task<Guid?> AddAsync(CreateItemInventarioDTO dto, string userId)
     {
         var validationResult = await _validator.ValidateAsync(dto);
 
@@ -39,6 +39,7 @@ public class ItemAppService : IItemAppService
         }
 
         var item = _mapper.Map<ItemInventario>(dto);
+        item.UserId = userId;
 
         await _uow.Itens.AddAsync(item);
         var saved = await _uow.CommitAsync() > 0;
@@ -46,13 +47,14 @@ public class ItemAppService : IItemAppService
         return saved ? item.Id : null;
     }
 
-    public async Task<ItemInventarioDTO?> GetByIdAsync(Guid id)
+    public async Task<ItemInventarioDTO?> GetByIdAsync(Guid id, string userId)
     {
-        var item = await _uow.Itens.GetByIdAsync(id);
+        var item = await _uow.Itens.GetByIdAndUserIdAsync(id, userId);
         if (item == null) return null;
 
         return new ItemInventarioDTO(
             item.Id,
+            item.UserId,
             item.Nome,
             item.Descricao,
             item.Marca,
@@ -66,9 +68,9 @@ public class ItemAppService : IItemAppService
             item.NotaFiscalUrl);
     }
 
-    public async Task<bool> UpdateAsync(Guid id, CreateItemInventarioDTO dto)
+    public async Task<bool> UpdateAsync(Guid id, CreateItemInventarioDTO dto, string userId)
     {
-        var itemExistente = await _uow.Itens.GetByIdAsync(id);
+        var itemExistente = await _uow.Itens.GetByIdAndUserIdAsync(id, userId);
         if (itemExistente == null) return false;
 
         itemExistente.Nome = dto.Nome;
@@ -85,9 +87,9 @@ public class ItemAppService : IItemAppService
         return await _uow.CommitAsync() > 0;
     }
 
-    public async Task<bool> DeleteAsync(Guid id)
+    public async Task<bool> DeleteAsync(Guid id, string userId)
     {
-        var item = await _uow.Itens.GetByIdAsync(id);
+        var item = await _uow.Itens.GetByIdAndUserIdAsync(id, userId);
         if (item == null) return false;
 
         _uow.Itens.Delete(item);

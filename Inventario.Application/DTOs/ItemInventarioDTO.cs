@@ -2,6 +2,7 @@ namespace Inventario.Application.DTOs;
 
 public record ItemInventarioDTO(
     Guid Id,
+    string UserId,
     string Nome,
     string? Descricao,
     string? Marca,

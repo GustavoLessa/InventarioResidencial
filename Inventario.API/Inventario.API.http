@@ -1,18 +1,22 @@
 @Inventario.API_HostAddress = http://localhost:5104
 @itemId = 00000000-0000-0000-0000-000000000000
+@userId = user-123
 
 GET {{Inventario.API_HostAddress}}/api/ItemInventario
 Accept: application/json
+X-User-Id: {{userId}}
 
 ###
 
 GET {{Inventario.API_HostAddress}}/api/ItemInventario/{{itemId}}
 Accept: application/json
+X-User-Id: {{userId}}
 
 ###
 
 POST {{Inventario.API_HostAddress}}/api/ItemInventario
 Content-Type: application/json
+X-User-Id: {{userId}}
 
 {
   "nome": "Notebook Dell",
@@ -29,6 +33,7 @@ Content-Type: application/json
 
 PUT {{Inventario.API_HostAddress}}/api/ItemInventario/{{itemId}}
 Content-Type: application/json
+X-User-Id: {{userId}}
 
 {
   "nome": "Notebook Dell Atualizado",
@@ -45,5 +50,6 @@ Content-Type: application/json
 
 DELETE {{Inventario.API_HostAddress}}/api/ItemInventario/{{itemId}}
 Accept: application/json
+X-User-Id: {{userId}}
 
 ###
