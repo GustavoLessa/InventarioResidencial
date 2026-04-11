@@ -1,5 +1,5 @@
 @Inventario.API_HostAddress = http://localhost:5104
-@itemId = 00000000-0000-0000-0000-000000000000
+@itemId = 267923a6-0450-4dff-a82c-d355eec979d3
 @userId = user-123
 
 GET {{Inventario.API_HostAddress}}/api/ItemInventario
@@ -24,8 +24,8 @@ X-User-Id: {{userId}}
   "marca": "Dell",
   "modelo": "Latitude 5420",
   "valorCompra": 4500.00,
-  "categoriaId": "00000000-0000-0000-0000-000000000001",
-  "localId": "00000000-0000-0000-0000-000000000002",
+  "categoriaId": "a52b5010-40e4-4cd3-8017-ddf686b7ef9d",
+  "localId": "94cd7b41-e0f1-4722-ade4-273500e316db",
   "dataAquisicao": "2026-04-01T00:00:00Z"
 }
 
@@ -39,10 +39,10 @@ X-User-Id: {{userId}}
   "nome": "Notebook Dell Atualizado",
   "descricao": "Notebook de trabalho atualizado",
   "marca": "Dell",
-  "modelo": "Latitude 5420",
+  "modelo": "Latitude 7200",
   "valorCompra": 4500.00,
-  "categoriaId": "00000000-0000-0000-0000-000000000001",
-  "localId": "00000000-0000-0000-0000-000000000002",
+  "categoriaId": "a52b5010-40e4-4cd3-8017-ddf686b7ef9d",
+  "localId": "94cd7b41-e0f1-4722-ade4-273500e316db",
   "dataAquisicao": "2026-04-01T00:00:00Z"
 }
 

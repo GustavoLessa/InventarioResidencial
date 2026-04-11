@@ -50,22 +50,7 @@ public class ItemAppService : IItemAppService
     public async Task<ItemInventarioDTO?> GetByIdAsync(Guid id, string userId)
     {
         var item = await _uow.Itens.GetByIdAndUserIdAsync(id, userId);
-        if (item == null) return null;
-
-        return new ItemInventarioDTO(
-            item.Id,
-            item.UserId,
-            item.Nome,
-            item.Descricao,
-            item.Marca,
-            item.Modelo,
-            item.ValorCompra,
-            item.ValorAtual,
-            item.DataAquisicao,
-            item.Categoria?.Nome ?? string.Empty,
-            item.Local?.Nome ?? string.Empty,
-            item.ImagemUrl,
-            item.NotaFiscalUrl);
+        return item == null ? null : _mapper.Map<ItemInventarioDTO>(item);
     }
 
     public async Task<bool> UpdateAsync(Guid id, CreateItemInventarioDTO dto, string userId)

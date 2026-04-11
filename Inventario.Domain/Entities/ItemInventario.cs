@@ -11,9 +11,9 @@ public class ItemInventario : BaseEntity
     public decimal? ValorAtual { get; set; }
     public DateTime? DataAquisicao { get; set; }
     public Guid LocalId { get; set; }
-    public virtual Local? Local { get; set; }
+    public Local? Local { get; set; }
     public Guid CategoriaId { get; set; }
-    public virtual Categoria? Categoria { get; set; }
+    public Categoria? Categoria { get; set; }
     public string? ImagemUrl { get; set; }
     public string? NotaFiscalUrl { get; set; }
 

@@ -14,9 +14,7 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options
-        .UseLazyLoadingProxies()
-        .UseNpgsql(connectionString, npgsql => npgsql.MigrationsAssembly("Inventario.Infrastructure")));
+    options.UseNpgsql(connectionString, npgsql => npgsql.MigrationsAssembly("Inventario.Infrastructure")));
 
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped<IItemInventarioRepository, ItemInventarioRepository>();
