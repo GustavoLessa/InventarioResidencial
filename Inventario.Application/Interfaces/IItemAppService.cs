@@ -6,7 +6,7 @@ public interface IItemAppService
 {
     Task<IEnumerable<ItemInventarioDTO>> GetAllAsync();
     Task<ItemInventarioDTO?> GetByIdAsync(Guid id);
-    Task<bool> AddAsync(CreateItemInventarioDTO dto);
+    Task<Guid?> AddAsync(CreateItemInventarioDTO dto);
     Task<bool> UpdateAsync(Guid id, CreateItemInventarioDTO dto);
     Task<bool> DeleteAsync(Guid id);
 }

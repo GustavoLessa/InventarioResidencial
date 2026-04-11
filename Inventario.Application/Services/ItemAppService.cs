@@ -7,15 +7,16 @@ using Inventario.Domain.Interfaces;
 
 namespace Inventario.Application.Services;
 
-
 public class ItemAppService : IItemAppService
 {
-    // Adicione a injeção do IValidator no construtor
-private readonly IValidator<CreateItemInventarioDTO> _validator;
+    private readonly IValidator<CreateItemInventarioDTO> _validator;
     private readonly IUnitOfWork _uow;
-    private readonly IMapper _mapper; // Injetamos o Mapper
+    private readonly IMapper _mapper;
 
-    public ItemAppService(IUnitOfWork uow, IValidator<CreateItemInventarioDTO> validator, IMapper mapper)
+    public ItemAppService(
+        IUnitOfWork uow,
+        IValidator<CreateItemInventarioDTO> validator,
+        IMapper mapper)
     {
         _uow = uow;
         _validator = validator;
@@ -25,39 +26,44 @@ private readonly IValidator<CreateItemInventarioDTO> _validator;
     public async Task<IEnumerable<ItemInventarioDTO>> GetAllAsync()
     {
         var itens = await _uow.Itens.GetAllAsync();
-        
         return _mapper.Map<IEnumerable<ItemInventarioDTO>>(itens);
     }
 
-    public async Task<bool> AddAsync(CreateItemInventarioDTO dto)
+    public async Task<Guid?> AddAsync(CreateItemInventarioDTO dto)
     {
-        // Executa a validação
         var validationResult = await _validator.ValidateAsync(dto);
-        
+
         if (!validationResult.IsValid)
         {
-            // Agora lançamos a ValidationException do FluentValidation
             throw new ValidationException(validationResult.Errors);
         }
 
-        // Converte DTO para Entidade automaticamente
         var item = _mapper.Map<ItemInventario>(dto);
 
         await _uow.Itens.AddAsync(item);
-        return await _uow.CommitAsync() > 0;
+        var saved = await _uow.CommitAsync() > 0;
+
+        return saved ? item.Id : null;
     }
 
     public async Task<ItemInventarioDTO?> GetByIdAsync(Guid id)
     {
-        var i = await _uow.Itens.GetByIdAsync(id);
-        if (i == null) return null;
+        var item = await _uow.Itens.GetByIdAsync(id);
+        if (item == null) return null;
 
         return new ItemInventarioDTO(
-            i.Id, i.Nome, i.Descricao, i.Marca, i.Modelo, 
-            i.ValorCompra, i.ValorAtual, i.DataAquisicao,
-            i.Categoria?.Nome ?? "", i.Local?.Nome ?? "",
-            i.ImagemUrl, i.NotaFiscalUrl
-        );
+            item.Id,
+            item.Nome,
+            item.Descricao,
+            item.Marca,
+            item.Modelo,
+            item.ValorCompra,
+            item.ValorAtual,
+            item.DataAquisicao,
+            item.Categoria?.Nome ?? string.Empty,
+            item.Local?.Nome ?? string.Empty,
+            item.ImagemUrl,
+            item.NotaFiscalUrl);
     }
 
     public async Task<bool> UpdateAsync(Guid id, CreateItemInventarioDTO dto)
@@ -65,7 +71,6 @@ private readonly IValidator<CreateItemInventarioDTO> _validator;
         var itemExistente = await _uow.Itens.GetByIdAsync(id);
         if (itemExistente == null) return false;
 
-        // Atualizando as propriedades (Clean Code: mapeamento manual)
         itemExistente.Nome = dto.Nome;
         itemExistente.Descricao = dto.Descricao;
         itemExistente.Marca = dto.Marca;

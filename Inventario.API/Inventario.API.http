@@ -1,6 +1,49 @@
 @Inventario.API_HostAddress = http://localhost:5104
+@itemId = 00000000-0000-0000-0000-000000000000
 
-GET {{Inventario.API_HostAddress}}/weatherforecast/
+GET {{Inventario.API_HostAddress}}/api/ItemInventario
+Accept: application/json
+
+###
+
+GET {{Inventario.API_HostAddress}}/api/ItemInventario/{{itemId}}
+Accept: application/json
+
+###
+
+POST {{Inventario.API_HostAddress}}/api/ItemInventario
+Content-Type: application/json
+
+{
+  "nome": "Notebook Dell",
+  "descricao": "Notebook de trabalho",
+  "marca": "Dell",
+  "modelo": "Latitude 5420",
+  "valorCompra": 4500.00,
+  "categoriaId": "00000000-0000-0000-0000-000000000001",
+  "localId": "00000000-0000-0000-0000-000000000002",
+  "dataAquisicao": "2026-04-01T00:00:00Z"
+}
+
+###
+
+PUT {{Inventario.API_HostAddress}}/api/ItemInventario/{{itemId}}
+Content-Type: application/json
+
+{
+  "nome": "Notebook Dell Atualizado",
+  "descricao": "Notebook de trabalho atualizado",
+  "marca": "Dell",
+  "modelo": "Latitude 5420",
+  "valorCompra": 4500.00,
+  "categoriaId": "00000000-0000-0000-0000-000000000001",
+  "localId": "00000000-0000-0000-0000-000000000002",
+  "dataAquisicao": "2026-04-01T00:00:00Z"
+}
+
+###
+
+DELETE {{Inventario.API_HostAddress}}/api/ItemInventario/{{itemId}}
 Accept: application/json
 
 ###
